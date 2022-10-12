@@ -1,6 +1,6 @@
 ---
 title: "Mini Data-Analysis Deliverable 1"
-output: html_document
+output: github_document
 ---
 
 # Welcome to your (maybe) first-ever data analysis project!
@@ -80,10 +80,10 @@ And that is exactly the first thing that you will do!
 
 <!-------------------------- Start your work below ---------------------------->
 
-1: CHOICE_1\_HERE\
-2: CHOICE_2\_HERE\
-3: CHOICE_3\_HERE\
-4: CHOICE_4\_HERE
+1: cancer_sample
+2: steam_games
+3: vancouver_trees
+4: apt_buildings
 
 <!----------------------------------------------------------------------------->
 
@@ -95,7 +95,10 @@ And that is exactly the first thing that you will do!
 
 ```{r}
 ### EXPLORE HERE ###
-steam_games
+glimpse(cancer_sample)
+glimpse(steam_games)
+glimpse(vancouver_trees)
+glimpse(apt_buildings)
 ```
 
 <!----------------------------------------------------------------------------->
@@ -103,13 +106,18 @@ steam_games
 1.3 Now that you've explored the 4 datasets that you were initially most interested in, let's narrow it down to 2. What lead you to choose these 2? Briefly explain your choices below, and feel free to include any code in your explanation.
 
 <!-------------------------- Start your work below ---------------------------->
-
+I have narrowed my choices down to `cancer_sample` and `steam_games`. I am a MSc student in Bioinformatics so studying cancer data is of great interest. The `cancer_sample` dataset contains diagnosis so we can see if there are trends that favour a malignant diagnosis vs benign diagnosis. I am also an avid gamer, so data about games on steam, where I purchase most of my games, are fascinating to me. I am very interested in seeing if there are price trends that I can exploit.
 <!----------------------------------------------------------------------------->
 
 1.4 Time for the final decision! Going back to the beginning, it's important to have an *end goal* in mind. For example, if I had chosen the `titanic` dataset for my project, I might've wanted to explore the relationship between survival and other variables. Try to think of 1 research question that you would want to answer with each dataset. Note them down below, and make your final choice based on what seems more interesting to you!
 
 <!-------------------------- Start your work below ---------------------------->
+`cancer_sample`: How does the `area_mean`, `perimeter_mean`, and `texture_mean` affect the `diagnosis`?
 
+
+`steam_games`: I want to explore the relationships between `publisher`, `all_reviews`, `original_price`, 'discount_price', and how these factors affect each other.
+
+I think the research question regarding the `steam_games` is more interesting. The result of the analysis can also affect how I purchase games in the future. If highly reviewed games do not have great discounts, I might just buy the game on release instead of waiting. The research questions posed with the `cancer_sample` dataset concerns the shape and size of the tumour, which is not as interesting to me as the underlying genomics.
 <!----------------------------------------------------------------------------->
 
 # Important note
@@ -136,6 +144,51 @@ If we rewind and go back to the learning objectives, you'll see that by the end 
 2.2 For each of the 4 exercises that you complete, provide a *brief explanation* of why you chose that exercise in relation to your data (in other words, why does it make sense to do that?), and sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
+Exercise 1: I am interested in the prices of games on Steam so I plotted a distribution (histogram) of original game prices to see what most of the games on Steam are sold for originally. As there are vastly more games sold for cheaper prices, I used a log scale of the y-axis to visualize the plot. As I only buy games that cost less than \$100, I also filtered the dataset for prices cheaper than \$100.
+```{r}
+steam_games %>%
+  filter(original_price < 100) %>% # filter in games with original_price < 100
+  ggplot(aes(x = original_price, y = ..count..)) + # plot histogran using the counts of original price
+  geom_histogram(bins = 50) + #plot histogram using 50 bins
+  scale_y_log10() # using a logarithmic y-axis
+
+```
+
+Exercise 2: I am interested in the value of the discount, so I created a new `discount_price_delta` column (`original_price` - `discount_price`).
+```{r}
+steam_games <- #modify steam_games
+  steam_games %>%
+  mutate(discount_price_delta = original_price - discount_price) # make new column called discount_price_delta using original_price - discount_price
+glimpse(steam_games) # view modified steam_games
+
+```
+
+Exercise 6: Games have had in-game achievements for a long time. Steam has provided gamers an easy way to access to viewing and comparing their achievements versus their friends. I am interested to in seeing on the maxmimum, minimum, and average numer of  achievemments of games on steam. To accomplish that I use a boxplot. While not directly related to prices, I am still interested in summary statistics of number of achievements, as they play a big part in how I play games these days. Once I complete a game I really like, I tend to revisit the game and complete as many achivements as I can. As a few games have an extremely high number of achievements, I first filtered the dataset for games with number of achievements less than 100.
+
+
+```{r}
+steam_games %>%
+  filter(achievements < 100) %>% # filter in games with # achievements < 100
+  ggplot(aes(y = achievements)) + # use achievements variables for box plot
+  geom_boxplot() # plot box plot
+```
+
+
+
+Exercise 7: I like playing games that Bethesda Softworks, Larian studio, and Bandai Namco publish. I am interested in seeing the prices and how well these games are received by other people so I subsetted the `steam_games` dataset by filtering for games published by "Larian Studios,Focus Home Interactive,Larian Studios,Focus Home Interactive", "Bethesda-Softworks,Bethesda-Softworks", "BANDAI NAMCO Entertainment", and kept the variables `name`, `publisher`, `all_reviews`, `recent_reviews`, `original_price`, and `discount_price` and saved the new dataset under a new tibble called `beSo_LaSt_BaNa_games`.
+```{r}
+beSo_LaSt_BaNa_games <- # make new tibble called beSo_LaSt_BaNa_games
+  steam_games %>%
+  filter(publisher %in% c("Larian Studios,Focus Home Interactive,Larian Studios,Focus Home Interactive", # filter for interested publishers
+                          "Bethesda-Softworks,Bethesda-Softworks",
+                          "BANDAI NAMCO Entertainment")) %>%
+  select(name, publisher, all_reviews, recent_reviews) # keeping relevant variables
+glimpse(beSo_LaSt_BaNa_games) # view beSo_LaSt_BaNa_games
+```
+
+
+
+
 
 <!----------------------------------------------------------------------------->
 
