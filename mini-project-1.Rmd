@@ -197,6 +197,13 @@ glimpse(beSo_LaSt_BaNa_games) # view beSo_LaSt_BaNa_games
 So far, you have chosen a dataset and gotten familiar with it through exploring the data. Now it's time to figure out 4 research questions that you would like to answer with your data! Write the 4 questions and any additional comments at the end of this deliverable. These questions are not necessarily set in stone - TAs will review them and give you feedback; therefore, you may choose to pursue them as they are for the rest of the project, or make modifications!
 
 <!--- *****START HERE***** --->
+Research question 1: For each tier of reviewed games (Very Positive, Positive, etc.), how much discount can I expect?
+  
+Research question 2: For my interested publishers (Bethesda Softworks, Larian studio, and Bandai Namco publish), which of them produce higher quality games?
+
+Research question 3: For my interested publishers (Bethesda Softworks, Larian studio, and Bandai Namco publish), what are the prices the games they publish are normally sold for?
+
+Research question 4: How many games are sold by publishers on Steam?
 
 # Task 4: Process and summarize your data (13 points)
 
