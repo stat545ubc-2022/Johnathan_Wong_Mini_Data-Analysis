@@ -115,7 +115,7 @@ I have narrowed my choices down to `cancer_sample` and `steam_games`. I am a MSc
 `cancer_sample`: How does the `area_mean`, `perimeter_mean`, and `texture_mean` affect the `diagnosis`?
 
 
-`steam_games`: I want to explore the relationships between `publisher`, `all_reviews`, `original_price`, 'discount_price', and how these factors affect each other.
+`steam_games`: I want to explore the relationships between `publisher`, `all_reviews`, `original_price`, `discount_price`, and how these factors affect each other.
 
 I think the research question regarding the `steam_games` is more interesting. The result of the analysis can also affect how I purchase games in the future. If highly reviewed games do not have great discounts, I might just buy the game on release instead of waiting. The research questions posed with the `cancer_sample` dataset concerns the shape and size of the tumour, which is not as interesting to me as the underlying genomics.
 <!----------------------------------------------------------------------------->
@@ -145,20 +145,24 @@ If we rewind and go back to the learning objectives, you'll see that by the end 
 
 <!-------------------------- Start your work below ---------------------------->
 Exercise 1: I am interested in the prices of games on Steam so I plotted a distribution (histogram) of original game prices to see what most of the games on Steam are sold for originally. As there are vastly more games sold for cheaper prices, I used a log scale of the y-axis to visualize the plot. As I only buy games that cost less than \$100, I also filtered the dataset for prices cheaper than \$100.
-```{r}
+```{r warning=FALSE}
 steam_games %>%
   filter(original_price < 100) %>% # filter in games with original_price < 100
   ggplot(aes(x = original_price, y = ..count..)) + # plot histogran using the counts of original price
   geom_histogram(bins = 50) + #plot histogram using 50 bins
-  scale_y_log10() # using a logarithmic y-axis
+  scale_y_log10() + # using a logarithmic y-axis
+  xlab("Original Price") + 
+  ylab("Count") +
+  theme_bw()
 
 ```
 
-Exercise 2: I am interested in the value of the discount, so I created a new `discount_price_delta` column (`original_price` - `discount_price`).
+Exercise 2: I am interested in the value of the discount, so I created a new `discount_price_delta` column (`original_price` - `discount_price`). I have also noticed it is possible for `discount_price_delta` to be negative. I also removed these columns from the table.
 ```{r}
 steam_games <- #modify steam_games
   steam_games %>%
-  mutate(discount_price_delta = original_price - discount_price) # make new column called discount_price_delta using original_price - discount_price
+  mutate(discount_price_delta = original_price - discount_price) %>% # make new column called discount_price_delta using original_price - discount_price
+  filter(discount_price_delta >= 0) # remove entries with negative discount_price_delta
 glimpse(steam_games) # view modified steam_games
 
 ```
@@ -169,21 +173,21 @@ Exercise 6: Games have had in-game achievements for a long time. Steam has provi
 ```{r}
 steam_games %>%
   filter(achievements < 100) %>% # filter in games with # achievements < 100
-  ggplot(aes(y = achievements)) + # use achievements variables for box plot
+  ggplot(aes(y = achievements)) + # use achievements variable for box plot
   geom_boxplot() # plot box plot
 ```
 
 
 
-Exercise 7: I like playing games that Bethesda Softworks, Larian studio, and Bandai Namco publish. I am interested in seeing the prices and how well these games are received by other people so I subsetted the `steam_games` dataset by filtering for games published by "Larian Studios,Focus Home Interactive,Larian Studios,Focus Home Interactive", "Bethesda-Softworks,Bethesda-Softworks", "BANDAI NAMCO Entertainment", and kept the variables `name`, `publisher`, `all_reviews`, `recent_reviews`, `original_price`, and `discount_price` and saved the new dataset under a new tibble called `beSo_LaSt_BaNa_games`.
+Exercise 7: I selected games that Choice of Games, VT Publishing, and Paradox Interative publish. I am interested in seeing the prices and how well these games are received by other people so I subsetted the `steam_games` dataset by filtering for games published by "Choice of Games,Choice of Games", "VT Publishing,VT Publishing", "Paradox Interactive,Paradox Interactive", and kept the variables `name`, `publisher`, `all_reviews`, `recent_reviews`, `original_price`, and `discount_price` and saved the new dataset under a new tibble called `cog_vt_para_games`.
 ```{r}
-beSo_LaSt_BaNa_games <- # make new tibble called beSo_LaSt_BaNa_games
+cog_vt_para_games <- # make new tibble called cog_vt_para_games
   steam_games %>%
-  filter(publisher %in% c("Larian Studios,Focus Home Interactive,Larian Studios,Focus Home Interactive", # filter for interested publishers
-                          "Bethesda-Softworks,Bethesda-Softworks",
-                          "BANDAI NAMCO Entertainment")) %>%
-  select(name, publisher, all_reviews, recent_reviews) # keeping relevant variables
-glimpse(beSo_LaSt_BaNa_games) # view beSo_LaSt_BaNa_games
+  filter(publisher %in% c("Choice of Games,Choice of Games", # filter for interested publishers
+                          "VT Publishing,VT Publishing",
+                          "Paradox Interactive,Paradox Interactive")) %>%
+  select(name, publisher, all_reviews, recent_reviews, original_price, discount_price) # keeping relevant variables
+glimpse(cog_vt_para_games) # view cog_vt_para_games
 ```
 
 
@@ -197,11 +201,11 @@ glimpse(beSo_LaSt_BaNa_games) # view beSo_LaSt_BaNa_games
 So far, you have chosen a dataset and gotten familiar with it through exploring the data. Now it's time to figure out 4 research questions that you would like to answer with your data! Write the 4 questions and any additional comments at the end of this deliverable. These questions are not necessarily set in stone - TAs will review them and give you feedback; therefore, you may choose to pursue them as they are for the rest of the project, or make modifications!
 
 <!--- *****START HERE***** --->
-Research question 1: For each tier of reviewed games (Very Positive, Positive, etc.), how much discount can I expect?
+Research question 1: Across the games on Steam, what type of discounts can I expect?
   
-Research question 2: For my interested publishers (Bethesda Softworks, Larian studio, and Bandai Namco publish), which of them produce higher quality games?
+Research question 2: For my selected publishers, what are the prices the games they publish are normally sold for?
 
-Research question 3: For my interested publishers (Bethesda Softworks, Larian studio, and Bandai Namco publish), what are the prices the games they publish are normally sold for?
+Research question 3: For my selected publishers, which of them produce higher quality games, and how do reviews relate to price drops?
 
 Research question 4: How many games are sold by publishers on Steam?
 
@@ -232,7 +236,156 @@ Ensure that the output of each operation is printed!
 Make sure it's clear what research question you are doing each operation for!
 
 <!------------------------- Start your work below ----------------------------->
+For my research questions I will use both tibbles `steam_games` and `cog_vt_para_games`. In order to answer my research questions we need to first separate the `all_reviews` into 2 new columns 'review_sentiment', 'num_reviews_and_pct_pos_reviews' for both datasets.I then removed rows with malformed `review_sentiment` entries.
+```{r message=FALSE}
+library(stringr) # for str_detect
+```
 
+
+```{r warning=FALSE}
+cog_vt_para_games <-
+  cog_vt_para_games %>%
+  separate(all_reviews, c("review_sentiment", "num_reviews_and_pct_pos_reviews"), sep = ",", extra = "merge") %>% #separate all_reviews column using at the first instance of ,
+  filter(!str_detect(review_sentiment,"reviews")) # remove rows with malformed review_sentiment entries
+glimpse(cog_vt_para_games)
+```
+## Research Question 1
+
+I will use options 2, 3 and 6.
+
+
+Option 3: I will create a new categorical variable `discount_magnitude` with three possible values: "small", "medium", "large", using the numerical variable `discount_price_delta`. The following critera will be used: "small" discounts are given to entries with `discount_price_delta` < 20, "medium" discounts are given to entries with `discount_price_delta` >= 20 and < 40, "large" discounts are given to entries with `discount_price_delta` > 40.
+
+```{r}
+steam_games <-
+  steam_games %>%
+  mutate(discount_magnitude = ifelse(discount_price_delta < 20, "small", # add new variables based on description above
+                                     ifelse(discount_price_delta >= 20 & discount_price_delta < 40, "medium",
+                                            "large")))
+glimpse(steam_games)
+
+```
+By itself, option 3 does not inform me much.
+
+Option 2: I will then see how many discounts of each type there are.
+```{r}
+steam_games %>%
+  count(discount_magnitude) # count how many discounts
+```
+Combining options 2 and 3, I see that "large" discounts, which I tend to wait until, is not as common as "small" discounts so I may not wait as long for a game to have "large" discounts.
+
+Option 6: I will plot a distribution(histogram) of the numerical variable `discount_price_delta`. The y-axis will be scaled lograthically to easily compare the magnitude between. I used the scale library to make the y-axis logarithmic scale look pretty.
+```{r message=FALSE}
+library(scales) # for trans_breaks and trans_format
+```
+
+```{r warning=FALSE}
+steam_games %>%
+  filter(original_price < 100) %>% # filter in games with original_price < 100
+  ggplot(aes(x = discount_price_delta, y = ..count..)) + # plot histogran using the counts of original price
+  geom_histogram(bins = 50) + #plot histogram using 50 bins
+  scale_y_continuous(trans = "log2", # using a logarithmic y-axis
+                     breaks = trans_breaks("log2", function(x) 2^x), # use log2 breaks for the y axis
+                     labels = trans_format("log2", math_format(2^.x))) + # use log2 labels for y-axis
+  ylab("Number of Games") +
+  xlab(expression("Discount Price "~ Delta)) +
+  theme_bw(base_size = 20) 
+  
+```
+Option 6 plotted the discount delta and showed the same conclustion from the summary data. It does, however, allow me to see around which numerical value discount is more common instead of the range represented by the categorical variables.
+
+## Research Question 2
+
+I will use options 1 and 5
+
+Option 1: I summarized the original prices of games sold by my selected publishers on Steam by calculating the mean, range, median, and standard deviation.
+```{r}
+cog_vt_para_games %>%
+  group_by(publisher) %>%
+  summarise(mean_price = mean(original_price),
+            range_price = max(original_price) - min(original_price),
+            median_price = median(original_price),
+            std_price = sd(original_price))
+```
+The summarized values showed me what prices to expect from these publishers
+
+Option 5: I plotted a box plot of the original prices, separated by publisher, to see what prices to expect. I then plotted a jitter plot on top of the box plot to see if any of the summary statistics in the box plot is skewed by the data points.
+```{r}
+ggplot(cog_vt_para_games, aes(x = publisher, y = original_price)) +
+  geom_boxplot() +
+  geom_jitter() +
+  scale_x_discrete(labels = c("Choice of Games", "Paradox Interactive", "VT Publishing")) + 
+  ylab("Original Price") +
+  xlab("Publisher") +
+  theme_bw(base_size = 20)
+  
+```
+Again, the plots confirmed the earlier observations. In addition, with the aid of the jitter plot, we can see that the original prices of games sold by Choice of Games and VT Publishing are not equally distributed in the range. The vast majority of the games reside at one extreme.
+
+
+## Research Question 3:
+
+I will use options 4 and 7
+
+Option 4: I counted the number of publisher and reviewer sentiments, and also calculated their relative proportion
+```{r}
+cog_vt_para_games %>%
+  count(publisher, review_sentiment) %>%
+  rename(count = n) %>%
+  mutate(proportion = count / sum(count))
+```
+The results showed that Choice of games produce the most highly reviewed games among the publishers. VT Publishing in general publish games that have mixed reviews
+
+
+Option 7: I plotted `discount_price` vs `original_price`, using `geom_point` and changed the shape and color of the points depending on the `publisher` and `review_sentiment`. I then adjusted the alpha so that I can see overlapping points. 
+```{r}
+ggplot(cog_vt_para_games, aes(discount_price, original_price)) +
+  geom_point(aes(color = review_sentiment,
+                 shape = publisher),
+             alpha = 0.3) + 
+  ylab("Original Price") +
+  xlab("Discount Price") +
+  theme_bw()
+```
+This analysis was not very informative. This is in part due to the points being very scattered and so it is hard to observer relations between them. I think if the datapoints are closer in scale, it would aid seeing if review scores dictate the amount of discount. 
+
+## Research Question 4
+
+I will use options 2 and 8.
+
+Option 2: I counted the number of steam games using the `Count` function on the categorial variable `publisher` and stored it in a new tibble called `publisher_games_on_steam`.
+```{r}
+publisher_games_on_steam <-
+  steam_games %>%
+  count(publisher, sort = T) %>%
+  rename(count = n)
+glimpse(publisher_games_on_steam)
+  
+```
+By itself, option 2 is not enough to address my research question.
+
+Options 8: I plotted a histogram of the tibble generated in option 2 with bin sizes of 10, 30, 50.
+```{r}
+ggplot(publisher_games_on_steam, aes(x = count, y = ..count..)) + # plot histogran using the counts of games with the same publisher
+  geom_histogram(bins = 10) +#plot histogram using 10 bins
+  ylab("Count") +
+  xlab("Number of Games Publisher Publish on Steam") +
+  theme_bw()
+
+ggplot(publisher_games_on_steam, aes(x = count, y = ..count..)) + # plot histogran using the counts of games with the same publisher
+  geom_histogram(bins = 30) +#plot histogram using 30 bins
+  ylab("Count") +
+  xlab("Number of Games Publisher Publish on Steam") +
+  theme_bw()
+
+
+ggplot(publisher_games_on_steam, aes(x = count, y = ..count..)) + # plot histogran using the counts of games with the same publisher
+  geom_histogram(bins = 50) +#plot histogram using 30 bins
+  ylab("Count") +
+  xlab("Number of Games Publisher Publish on Steam") +
+  theme_bw() 
+```
+The histogram is the most useful as the range in each bin is smaller. Through that we can see that the vast majority of publishers have number of games published in the smallest bin, which answeres my research question.
 <!----------------------------------------------------------------------------->
 
 ### 1.2 (3 points)
@@ -240,6 +393,20 @@ Make sure it's clear what research question you are doing each operation for!
 Based on the operations that you've completed, how much closer are you to answering your research questions? Think about what aspects of your research questions remain unclear. Can your research questions be refined, now that you've investigated your data a bit more? Which research questions are yielding interesting results?
 
 <!-------------------------- Start your work below ---------------------------->
+Some of the research questions have been answered but some have not. 
+For research question 1, it seems like the far majority of games have a discount of \$25. This indicates to me that when a game I am intersted in has a sale of \$25 or more, I should consider buying it as the chances of the price going lower than that is less likely. 
+
+For research question 2, it seems like Choice of Games has a habit of listing their games at an absurd price of ~$500, whereas the other publishers have different criteria for pricing their games. VT Publishing lists their games for either very cheap or very expensive. 
+
+For research question 3, the question of review relating to discount prices was not answered. We do see that these publishers do not really publish games that are overwhelmingly positive.
+
+For researcg question 4, we see that the far majority of publishers have fewer than 20 games published, which answered my question.
+
+Some of my research questions can be refined. For example, for research question 1, instead of looking at the absolute price difference, we can look at the relative price difference. Alternatively, the study can be done by separating games into different original price categories. A game that cost \$20 originally can have at most \$20 discount. As there are many cheaper games on Steam, this has a bias of overrepresenting lower discount prices. For research question 3, it maybe more appopriate to study the relation between reviews and discount price with publishers of the same calibre. Different levels of publishers may have vastly different pricing policies.
+
+Research question 3 yielded some interesting results. I was very surprised that Choice of Games can list their games at such a high price. Do people actually buy games that expensive?
+
+Finally, I'd like to note that the dataset `steam_games` is quite messy. Not all entries are filled in the same way. There are entries with `discount_price` higher than `original_price`.
 
 <!----------------------------------------------------------------------------->
 
