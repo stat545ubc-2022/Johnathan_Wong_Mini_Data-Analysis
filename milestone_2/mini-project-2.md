@@ -362,8 +362,9 @@ steam_games_m2_single_genre %>%
   facet_wrap(~genre, scales = "free_x") # rescale x-axis by removing unused labels 
 ```
 
-![](mini-project-2_files/figure-gfm/unnamed-chunk-9-1.png)<!-- --> I
-reoreder the genre factor level by the frequency of each genre. The
+![](mini-project-2_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+I reoreder the genre factor level by the frequency of each genre. The
 reason for this ordering is some genres have few entries and I want to
 make judgement on genres of games with more entries, as these genre will
 have more statistical power. Now I can see that the box plot of the
@@ -388,8 +389,9 @@ steam_games_m2_single_genre %>%
   facet_wrap(~genre, scales = "free_x") # rescale x-axis by removing unused labels 
 ```
 
-![](mini-project-2_files/figure-gfm/unnamed-chunk-10-1.png)<!-- --> I am
-interested in action games discount versus the rest. To do that, I
+![](mini-project-2_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+I am interested in action games discount versus the rest. To do that, I
 collapsed all other factors into “Other” using `fct_collapse`. By
 plotting the “Action” genre against the “Other”, I can compare action
 games discounts against the other discounts on steam, and I can see that

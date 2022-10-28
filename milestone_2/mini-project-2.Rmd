@@ -206,6 +206,7 @@ steam_games_m2_single_genre %>%
   geom_boxplot(width = 0.2) +
   facet_wrap(~genre, scales = "free_x") # rescale x-axis by removing unused labels 
 ```
+
 I reoreder the genre factor level by the frequency of each genre. The reason for this ordering is some genres have few entries and I want to make judgement on genres of games with more entries, as these genre will have more statistical power. Now I can see that the box plot of the Action game uses more datapoints to generate the summary stats (quartiles) used in boxplot.
 
 <!----------------------------------------------------------------------------->
@@ -228,6 +229,7 @@ steam_games_m2_single_genre %>%
   geom_boxplot(width = 0.2) +
   facet_wrap(~genre, scales = "free_x") # rescale x-axis by removing unused labels 
 ```
+
 I am interested in action games discount versus the rest. To do that, I collapsed all other factors into "Other" using `fct_collapse`. By plotting the "Action" genre against the "Other", I can compare action games discounts against the other discounts on steam, and I can see that action games have a higher median discount on average so action games are probably more econmoical to play.
 
 <!----------------------------------------------------------------------------->
