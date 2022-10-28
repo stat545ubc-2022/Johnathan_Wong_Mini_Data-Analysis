@@ -843,7 +843,7 @@ with bin sizes of 10, 30, 50.
 
 ``` r
 ggplot(publisher_games_on_steam, aes(x = count, y = ..count..)) + # plot histogran using the counts of games with the same publisher
-  geom_histogram(bins = 10) +#plot histogram using 10 bins
+  geom_histogram(bins = 10) + #plot histogram using 10 bins
   ylab("Count") +
   xlab("Number of Games Publisher Publish on Steam") +
   theme_bw()
@@ -853,7 +853,7 @@ ggplot(publisher_games_on_steam, aes(x = count, y = ..count..)) + # plot histogr
 
 ``` r
 ggplot(publisher_games_on_steam, aes(x = count, y = ..count..)) + # plot histogran using the counts of games with the same publisher
-  geom_histogram(bins = 30) +#plot histogram using 30 bins
+  geom_histogram(bins = 30) + #plot histogram using 30 bins
   ylab("Count") +
   xlab("Number of Games Publisher Publish on Steam") +
   theme_bw()
@@ -863,7 +863,7 @@ ggplot(publisher_games_on_steam, aes(x = count, y = ..count..)) + # plot histogr
 
 ``` r
 ggplot(publisher_games_on_steam, aes(x = count, y = ..count..)) + # plot histogran using the counts of games with the same publisher
-  geom_histogram(bins = 50) +#plot histogram using 30 bins
+  geom_histogram(bins = 50) + #plot histogram using 50 bins
   ylab("Count") +
   xlab("Number of Games Publisher Publish on Steam") +
   theme_bw() 
