@@ -36,7 +36,7 @@ Using RStudio:
 
 1.  Press the green "Code"" button and then click the copy button
 
-2.  Open R studio and create a new project by going to "File" and then click "New Project"
+2.  Open Rstudio and create a new project by going to "File" and then click "New Project"
 
 3.  Press Version Control then Git. Then paste the link into the url box.
 
