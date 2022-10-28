@@ -703,6 +703,7 @@ steam_games %>%
 ```
 
 ![](mini-project-1_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
 Option 6 plotted the discount delta and showed the same conclustion from
 the summary data. It does, however, allow me to see around which
 numerical value discount is more common instead of the range represented
@@ -752,6 +753,7 @@ ggplot(cog_vt_para_games, aes(x = publisher, y = original_price)) +
 ```
 
 ![](mini-project-1_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
 Again, the plots confirmed the earlier observations. In addition, with
 the aid of the jitter plot, we can see that the original prices of games
 sold by Choice of Games and VT Publishing are not equally distributed in
@@ -809,11 +811,12 @@ ggplot(cog_vt_para_games, aes(discount_price, original_price)) +
   theme_bw()
 ```
 
-![](mini-project-1_files/figure-gfm/unnamed-chunk-16-1.png)<!-- --> This
-analysis was not very informative. This is in part due to the points
-being very scattered and so it is hard to observer relations between
-them. I think if the datapoints are closer in scale, it would aid seeing
-if review scores dictate the amount of discount.
+![](mini-project-1_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+
+This analysis was not very informative. This is in part due to the
+points being very scattered and so it is hard to observer relations
+between them. I think if the datapoints are closer in scale, it would
+aid seeing if review scores dictate the amount of discount.
 
 ## Research Question 4
 
@@ -869,8 +872,9 @@ ggplot(publisher_games_on_steam, aes(x = count, y = ..count..)) + # plot histogr
   theme_bw() 
 ```
 
-![](mini-project-1_files/figure-gfm/unnamed-chunk-18-3.png)<!-- --> The
-histogram is the most useful as the range in each bin is smaller.
+![](mini-project-1_files/figure-gfm/unnamed-chunk-18-3.png)<!-- -->
+
+The histogram is the most useful as the range in each bin is smaller.
 Through that we can see that the vast majority of publishers have number
 of games published in the smallest bin, which answeres my research
 question.

@@ -265,6 +265,7 @@ steam_games <-
 glimpse(steam_games)
 
 ```
+
 By itself, option 3 does not inform me much.
 
 Option 2: I will then see how many discounts of each type there are.
@@ -272,6 +273,7 @@ Option 2: I will then see how many discounts of each type there are.
 steam_games %>%
   count(discount_magnitude) # count how many discounts
 ```
+
 Combining options 2 and 3, I see that "large" discounts, which I tend to wait until, is not as common as "small" discounts so I may not wait as long for a game to have "large" discounts.
 
 Option 6: I will plot a distribution(histogram) of the numerical variable `discount_price_delta`. The y-axis will be scaled lograthically to easily compare the magnitude between. I used the scale library to make the y-axis logarithmic scale look pretty.
@@ -292,6 +294,7 @@ steam_games %>%
   theme_bw(base_size = 20) 
   
 ```
+
 Option 6 plotted the discount delta and showed the same conclustion from the summary data. It does, however, allow me to see around which numerical value discount is more common instead of the range represented by the categorical variables.
 
 ## Research Question 2
@@ -307,6 +310,7 @@ cog_vt_para_games %>%
             median_price = median(original_price),
             std_price = sd(original_price))
 ```
+
 The summarized values showed me what prices to expect from these publishers
 
 Option 5: I plotted a box plot of the original prices, separated by publisher, to see what prices to expect. I then plotted a jitter plot on top of the box plot to see if any of the summary statistics in the box plot is skewed by the data points.
@@ -320,6 +324,7 @@ ggplot(cog_vt_para_games, aes(x = publisher, y = original_price)) +
   theme_bw(base_size = 20)
   
 ```
+
 Again, the plots confirmed the earlier observations. In addition, with the aid of the jitter plot, we can see that the original prices of games sold by Choice of Games and VT Publishing are not equally distributed in the range. The vast majority of the games reside at one extreme.
 
 
@@ -334,6 +339,7 @@ cog_vt_para_games %>%
   rename(count = n) %>%
   mutate(proportion = count / sum(count))
 ```
+
 The results showed that Choice of games produce the most highly reviewed games among the publishers. VT Publishing in general publish games that have mixed reviews
 
 
@@ -347,6 +353,7 @@ ggplot(cog_vt_para_games, aes(discount_price, original_price)) +
   xlab("Discount Price") +
   theme_bw()
 ```
+
 This analysis was not very informative. This is in part due to the points being very scattered and so it is hard to observer relations between them. I think if the datapoints are closer in scale, it would aid seeing if review scores dictate the amount of discount. 
 
 ## Research Question 4
@@ -362,6 +369,7 @@ publisher_games_on_steam <-
 glimpse(publisher_games_on_steam)
   
 ```
+
 By itself, option 2 is not enough to address my research question.
 
 Options 8: I plotted a histogram of the tibble generated in option 2 with bin sizes of 10, 30, 50.
@@ -385,6 +393,7 @@ ggplot(publisher_games_on_steam, aes(x = count, y = ..count..)) + # plot histogr
   xlab("Number of Games Publisher Publish on Steam") +
   theme_bw() 
 ```
+
 The histogram is the most useful as the range in each bin is smaller. Through that we can see that the vast majority of publishers have number of games published in the smallest bin, which answeres my research question.
 <!----------------------------------------------------------------------------->
 
